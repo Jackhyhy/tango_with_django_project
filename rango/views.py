@@ -2,6 +2,7 @@ from django.shortcuts import render
 from rango.models import Category
 from rango.models import Page
 from django.http import HttpResponse
+from rango.forms import CategoryForm
 
 # Create your views here.
 def show_category(request, category_name_slug):
@@ -42,3 +43,24 @@ def index(request):
 
 def about(request):
 	return HttpResponse("Rango says here is the about page. <a href='/rango/'>Index</a>")
+
+def add_category(request):
+    form = CategoryForm()
+    # 是 HTTP POST 请求吗？
+    if request.method == 'POST':
+        form = CategoryForm(request.POST)
+        # 表单数据有效吗？
+        if form.is_valid():
+            # 把新分类存入数据库
+            form.save(commit=True)
+            # 保存新分类后可以显示一个确认消息
+            # 不过既然最受欢迎的分类在首页
+            # 那就把用户带到首页吧
+            return index(request)
+        else:
+            # 表单数据有错误
+            # 直接在终端里打印出来
+            print(form.errors)
+    # 处理有效数据和无效数据之后
+    # 渲染表单，并显示可能出现的错误消息
+    return render(request, 'rango/add_category.html', {'form': form})
