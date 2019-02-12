@@ -1,39 +1,23 @@
-from django.contrib.auth.models import User
 from django.db import models
 from django.template.defaultfilters import slugify
-
-
-class UserProfile(models.Model):
-    # 这一行是必须的
-    # 建立与 User 模型之间的关系
-    user = models.OneToOneField(User)
-
-    # 想增加的属性
-    website = models.URLField(blank=True)
-    picture = models.ImageField(upload_to='profile_images', blank=True)
-    
-    # 覆盖 __str__() 方法，返回有意义的字符串
-    # 如果使用 Python 2.7.x，还要定义 __unicode__ 方法
-    def __str__(self):
-        return self.user.username
+from django.contrib.auth.models import User
 
 class Category(models.Model):
     name = models.CharField(max_length=128, unique=True)
     views = models.IntegerField(default=0)
     likes = models.IntegerField(default=0)
-    slug = models.SlugField()
+    slug = models.SlugField(unique=True)
 
     def save(self, *args, **kwargs):
         self.slug = slugify(self.name)
         super(Category, self).save(*args, **kwargs)
-    slug = models.SlugField(unique=True)
 
     class Meta:
         verbose_name_plural = 'Categories'
 
-    def __str__(self): # Python 2 还要定义 __unicode__
+    def __str__(self): # For Python 2, use __unicode__ too
         return self.name
-    
+
 
 class Page(models.Model):
     category = models.ForeignKey(Category)
@@ -41,5 +25,18 @@ class Page(models.Model):
     url = models.URLField()
     views = models.IntegerField(default=0)
 
-    def __str__(self): # Python 2 还要定义 __unicode__
+    def __str__(self): # For Python 2, use __unicode__ too
         return self.title
+
+
+class UserProfile(models.Model):
+    # This line is required. Links UserProfile to a User model instance.
+    user = models.OneToOneField(User)
+    # The additional attributes we wish to include.
+    website = models.URLField(blank=True)
+    picture = models.ImageField(upload_to='profile_images', blank=True)
+    # Override the __unicode__() method to return out something meaningful!
+    # Remember if you use Python 2.7.x, define __unicode__ too!
+
+    def __str__(self):
+        return self.user.username

@@ -1,4 +1,4 @@
-import os
+import os 
 os.environ.setdefault('DJANGO_SETTINGS_MODULE',
                       'tango_with_django_project.settings')
 
@@ -7,45 +7,49 @@ django.setup()
 from rango.models import Category, Page
 
 def populate():
-    # 首先创建一些字典，列出想添加到各分类的网页
-    # 然后创建一个嵌套字典，设置各分类
-    # 这么做看起来不易理解，但是便于迭代，方便为模型添加数据
+    # First, we will create lists of dictionaries containing the pages
+    # we want to add into each category.
+    # Then we will create a dictionary of dictionaries for our categories. 
+    # This might seem a little bit confusing, but it allows us to iterate 
+    # through each data structure, and add the data to our models.
+
     python_pages = [
         {"title": "Official Python Tutorial",
-         "url":"http://docs.python.org/2/tutorial/","views":32},
+         "url":"http://docs.python.org/2/tutorial/","views": 32},
         {"title":"How to Think like a Computer Scientist",
-         "url":"http://www.greenteapress.com/thinkpython/","views":16},
+         "url":"http://www.greenteapress.com/thinkpython/","views": 16},
         {"title":"Learn Python in 10 Minutes",
-         "url":"http://www.korokithakis.net/tutorials/python/","views":8} ]
+         "url":"http://www.korokithakis.net/tutorials/python/","views": 8}]
 
     django_pages = [
         {"title":"Official Django Tutorial",
-         "url":"https://docs.djangoproject.com/en/1.9/intro/tutorial01/","views":32},
+         "url":"https://docs.djangoproject.com/en/1.9/intro/tutorial01/","views": 32},
         {"title":"Django Rocks",
-         "url":"http://www.djangorocks.com/","views":16},
+         "url":"http://www.djangorocks.com/","views": 16},
         {"title":"How to Tango with Django",
-         "url":"http://www.tangowithdjango.com/","views":8} ]
+         "url":"http://www.tangowithdjango.com/","views": 8}]
 
     other_pages = [
         {"title":"Bottle",
-         "url":"http://bottlepy.org/docs/dev/","views":32},
+         "url":"http://bottlepy.org/docs/dev/","views": 32},
         {"title":"Flask",
-         "url":"http://flask.pocoo.org","views":16} ]
+         "url":"http://flask.pocoo.org","views": 16}]
 
-    cats = {"Python": {"pages": python_pages,"views":128,"likes":64},
-            "Django": {"pages": django_pages,"views":64,"likes":32},
-            "Other Frameworks": {"pages": other_pages,"views":32,"likes":16} }
+    cats = {"Python": {"pages": python_pages,"views": 128, "likes": 64},
+            "Django": {"pages": django_pages,"views": 64, "likes": 32},
+            "Other Frameworks": {"pages": other_pages,"views": 32, "likes": 16}}
 
- # 如果想添加更多分类或网页，添加到前面的字典中即可
+    # If you want to add more catergories or pages,
+    # add them to the dictionaries above.
 
- # 下述代码迭代 cats 字典，添加各分类，并把相关的网页添加到分类中
- # 如果使用的是 Python 2.x，要使用 cats.iteritems() 迭代
- # 迭代字典的正确方式参见
- # http://docs.quantifiedcode.com/python-anti-patterns/readability/
+    # The code below goes through the cats dictionary, then adds each category,
+    # and then adds all the associated pages for that category.
+    # if you are using Python 2.x then use cats.iteritems() see
+    # http://docs.quantifiedcode.com/python-anti-patterns/readability/
+    # for more information about how to iterate over a dictionary properly.
 
-    for cat, cat_data in cats.items():
-        #c = add_cat(cat)
-        c = add_cat(cat,cat_data["views"],cat_data["likes"])
+    for cat, cat_data in cats.items(): 
+        c= add_cat(cat,cat_data["views"],cat_data["likes"])
         for p in cat_data["pages"]:
             add_page(c, p["title"], p["url"])
 
@@ -54,19 +58,20 @@ def populate():
             print("- {0} - {1}".format(str(c), str(p)))
 
 def add_page(cat, title, url, views=0):
-    p = Page.objects.get_or_create(category=cat, title=title)[0]
+    p = Page.objects.get_or_create(category=cat, title=title)[0] 
     p.url=url
     p.views=views
     p.save()
     return p
 
-def add_cat(name, views=0, likes=0):
+def add_cat(name,views=0,likes=0):
     c = Category.objects.get_or_create(name=name)[0]
-    c.views=views
-    c.likes=likes
+    c.views = views
+    c.likes = likes
     c.save()
     return c
-
+    
+# Start execution here!
 if __name__ == '__main__':
-    print("Starting Rango population script...")
+    print("Starting Rango population script...") 
     populate()

@@ -1,26 +1,15 @@
 {% extends 'rango/base.html' %}
+{% load staticfiles %}
 
-{% load staticfiles %} <!-- New line -->
+{% block title_block%}
+    rango says here is the about page
+{% endblock %}
 
-    {% block title_block %}
-        About
-    {% endblock %}
-
-   {% block body_block %}
-        <h1>Chapter8</h1>
-        
-            Rango says here is the about page. <br/>
-            This tutorial has been put together by Jinghua YAN. <br /> 
-
-            <strong>{{ boldmessage }}</strong><br />
-   
-            
-            <img src="{% static "images/about.jpg" %}"
-                 alt="Picture of About" /> <!-- New line -->
-        
-	
-		<img src="{{ MEDIA_URL}}cat.jpg" /
-			alt="Picture of a cat" /><!-- New line -->
-    
-
-  {% endblock %}
+{% block body_block%}
+        <h1>rango says here is the about page</h1>
+        <p>visits: {{ visits }}</p>
+        <div>
+            <a href="{% url 'index' %}">index</a>
+            <img src="{% static "images/cat.jpg" %}" alt="Picture of cats"/>
+        </div>
+{% endblock %}
