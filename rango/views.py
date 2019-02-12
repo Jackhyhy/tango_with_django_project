@@ -98,7 +98,11 @@ def show_category(request, category_name_slug):
 
 
 def about(request):
-	return HttpResponse("Rango says here is the about page. <a href='/rango/'>Index</a>")
+    # 打印请求方法，是 GET 还是 POST
+    print(request.method)
+    # 打印用户名，如未登录，打印“AnonymousUser”
+    print(request.user)
+    return render(request, 'rango/about.html', {})
 
 def add_category(request):
     form = CategoryForm()

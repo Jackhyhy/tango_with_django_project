@@ -1,13 +1,6 @@
-{% load rango_template_tags %}
-
 <!DOCTYPE html>
 {% load staticfiles %}
-
-<div>
-    {% block sidebar_block %}
-        {% get_category_list %}
-    {% endblock %}
-</div>
+{% load rango_template_tags %}
 
 <html>
     <head>
@@ -29,8 +22,13 @@
                 <li><a href="{% url 'add_category' %}">Add New Category</a></li>
                 <li><a href="{% url 'about' %}">About</a></li>
                 <li><a href="{% url 'index' %}">Index</a></li>
-                <li><a href="{% url 'register' %}">Register Here</a></li>
             </ul>
         </div>
+       
+        <div>
+	    		{% block sidebar_block %}
+	        		{% get_category_list  %}
+	    		{% endblock %}
+		</div>
     </body>
 </html>
