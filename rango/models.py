@@ -1,5 +1,21 @@
+from django.contrib.auth.models import User
 from django.db import models
 from django.template.defaultfilters import slugify
+
+
+class UserProfile(models.Model):
+    # 这一行是必须的
+    # 建立与 User 模型之间的关系
+    user = models.OneToOneField(User)
+
+    # 想增加的属性
+    website = models.URLField(blank=True)
+    picture = models.ImageField(upload_to='profile_images', blank=True)
+    
+    # 覆盖 __str__() 方法，返回有意义的字符串
+    # 如果使用 Python 2.7.x，还要定义 __unicode__ 方法
+    def __str__(self):
+        return self.user.username
 
 class Category(models.Model):
     name = models.CharField(max_length=128, unique=True)
